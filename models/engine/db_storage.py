@@ -2,6 +2,7 @@
 """
 This module defines a class to manage database storage of the airbnb_clone
 """
+import os
 from os import getenv
 from sqlalchemy import create_engine, MetaData
 from models.base_model import Base

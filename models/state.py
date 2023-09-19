@@ -17,9 +17,12 @@ class State(BaseModel, Base):
     # for file storage
     @property
     def cities(self):
+        """
+        Getter attribute for cities
+        """
         city_objects = storage.all('City')
         city_list = []
         for city in city_objects.values():
-            if city.state_id = self.id:
+            if city.state_id == self.id:
                 city_list.append(city)
         return city_list

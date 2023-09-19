@@ -3,16 +3,24 @@
 from models.base_model import BaseModel, Base
 from sqlalchemy.orm import relationship
 from models import storage
+from os import getenv
+from models.city import City
 
 
 class State(BaseModel, Base):
     """ State class """
-    __tablename__ = 'states'
+    if getenv('HBNB_TYPE_STORAGE') == 'db':
+        __tablename__ = 'states'
 
-    name = Column(String(128), nullable=False)
+        name = Column(String(128), nullable=False)
+        # for dbstorage
+        cities = relationship(
+                'City',
+                backref='state',
+                cascade='all, delete-orphan')
 
-    # for dbstorage
-    cities = relationship('City', backref='state', cascade='all, delete-orphan')
+    else:
+        name = ""
 
     # for file storage
     @property
@@ -20,9 +28,9 @@ class State(BaseModel, Base):
         """
         Getter attribute for cities
         """
-        city_objects = storage.all('City')
+        from models import storage
         city_list = []
-        for city in city_objects.values():
+        for city in storage.all(City).values():
             if city.state_id == self.id:
                 city_list.append(city)
         return city_list

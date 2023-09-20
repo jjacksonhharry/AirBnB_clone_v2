@@ -52,7 +52,7 @@ class DBStorage:
                 query_result.extend(self.__session.query(cls).all())
 
         for obj in query_result:
-            key = "{}.{}".format(type(obj).__name__, obj.id)
+            key = "{}.{}".format(obj.__class__.__name__, obj.id)
             objects[key] = obj
 
         return objects

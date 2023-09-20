@@ -34,7 +34,7 @@ class BaseModel:
                         )
 
             # manage kwargs to create an instance attr from given dictionary
-            for key, value in kwargs.item():
+            for key, value in kwargs.items():
                 if key != '__class__':
                     setattr(self, key, value)
 
@@ -63,9 +63,8 @@ class BaseModel:
         dictionary['updated_at'] = self.updated_at.isoformat()
 
         # remove key '_sa_instance_state'
-        for key in dictionary:
-            if key == '_sa_instance_state':
-                del dictionary[key]
+        if '_sa_instance_state' in dictionary.keys():
+            del dictionary['_sa_instance_state']
 
         return dictionary
 

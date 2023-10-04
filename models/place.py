@@ -25,6 +25,11 @@ class Place(BaseModel, Base):
         user = relationship("User", back_populates="places")
         city = relationship("City", back_populates="places", overlaps="cities")
 
+        reviews = relationship(
+            "Review",
+            backref="place",
+            cascade="all, delete-orphan")
+
     else:
         city_id = ""
         user_id = ""
@@ -38,3 +43,11 @@ class Place(BaseModel, Base):
         longitude = 0.0
         amenity_ids = []
 
+        @property
+        def reviews(self):
+            from models import storage
+            rev_list = []
+            for review in storage.all(Review).values():
+                if review.place_id == self.id:
+                    rev_list.append(review)
+            return rev_list

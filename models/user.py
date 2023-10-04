@@ -21,12 +21,11 @@ class User(BaseModel, Base):
                 "Place",
                 back_populates="user",
                 cascade="all, delete-orphan")
-        """
+
         reviews = relationship(
                 "Review",
                 backref="user",
                 cascade="all, delete-orphan")
-        """
 
     else:
         email = ""

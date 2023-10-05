@@ -8,9 +8,8 @@ from os.path import exists
 from datetime import datetime
 import os
 
-env.hosts = ['<IP web-01>', '<IP web-02>']  # Replace with your web server IPs
-env.user = 'ubuntu'  # Replace with your SSH username
-env.key_filename = 'my_ssh_private_key'  # Replace with your private key path
+env.hosts = ["54.210.96.128", "35.153.79.81"]
+env.user = "ubuntu"
 
 
 def do_pack():

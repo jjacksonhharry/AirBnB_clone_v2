@@ -30,34 +30,22 @@ def do_deploy(archive_path):
     """
     Distributes an archive to web servers and deploys it.
     """
-    if not os.path.exists(archive_path):
-        return False
-
-    try:
-        # Upload the archive to the /tmp/ directory on the web server
+    if os.path.exists(archive_path):
+        archived_file = archive_path[9:]
+        newest_version = "/data/web_static/releases/" + archived_file[:-4]
+        archived_file = "/tmp/" + archived_file
         put(archive_path, "/tmp/")
-
-        # Extract the archive to the /data/web_static/releases/ directory
-        archive_filename = os.path.basename(archive_path)
-        folder_name = archive_filename.split('.')[0]
-        release_path = "/data/web_static/releases/{}/".format(folder_name)
-        run("mkdir -p {}".format(release_path))
-        run("tar -xzf /tmp/{} -C {}".format(archive_filename, release_path))
-
-        # Remove the uploaded archive
-        run("rm /tmp/{}".format(archive_filename))
-
-        # Move contents to the appropriate directory
-        run("mv {}web_static/* {}".format(release_path, release_path))
-
-        # Delete the old symbolic link
-        run("rm -rf /data/web_static/current")
-
-        # Create a new symbolic link
-        run("ln -s {} /data/web_static/current".format(release_path))
+        run("sudo mkdir -p {}".format(newest_version))
+        run("sudo tar -xzf {} -C {}/".format(archived_file,
+                                             newest_version))
+        run("sudo rm {}".format(archived_file))
+        run("sudo mv {}/web_static/* {}".format(newest_version,
+                                                newest_version))
+        run("sudo rm -rf {}/web_static".format(newest_version))
+        run("sudo rm -rf /data/web_static/current")
+        run("sudo ln -s {} /data/web_static/current".format(newest_version))
 
         print("New version deployed!")
         return True
 
-    except Exception:
-        return False
+    return False

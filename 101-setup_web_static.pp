@@ -1,10 +1,17 @@
-# puppet script that sets up your web servers for the deployment of web_static
 # Define a custom fact to check if the directory exists
 Facter.add('web_static_dir_exists') do
   setcode do
     File.exist?('/data/web_static')
   end
 end
+
+# Create the /data directory if it doesn't exist
+file { '/data':
+  ensure  => 'directory',
+  owner   => 'ubuntu',
+  group   => 'ubuntu',
+  mode    => '0755',
+}
 
 # Create the /data/web_static directory if it doesn't exist
 if $web_static_dir_exists == false {
@@ -13,17 +20,25 @@ if $web_static_dir_exists == false {
     owner   => 'ubuntu',
     group   => 'ubuntu',
     mode    => '0755',
-    recurse => true,
   }
 }
 
-# Create the /data/web_static/releases/test directory
-file { '/data/web_static/releases/test':
+# Create the /data/web_static/releases directory if it doesn't exist
+file { '/data/web_static/releases':
   ensure  => 'directory',
   owner   => 'ubuntu',
   group   => 'ubuntu',
   mode    => '0755',
   require => File['/data/web_static'],
+}
+
+# Create the /data/web_static/releases/test directory if it doesn't exist
+file { '/data/web_static/releases/test':
+  ensure  => 'directory',
+  owner   => 'ubuntu',
+  group   => 'ubuntu',
+  mode    => '0755',
+  require => File['/data/web_static/releases'],
 }
 
 # Create the symbolic link /data/web_static/current

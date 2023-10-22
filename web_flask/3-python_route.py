@@ -37,8 +37,7 @@ def python(text="is_cool"):
     """
     A route that displays 'Python ' followed by the value of the text variable
     """
-    text = text.replace("_", " ")
-    return "Python " + text
+    return "C {}".format(text.replace("_", " "))
 
 
 if __name__ == '__main__':

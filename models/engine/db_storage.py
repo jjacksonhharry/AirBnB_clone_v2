@@ -77,6 +77,12 @@ class DBStorage:
         if obj:
             self.__session.delete(obj)
 
+    def close(self):
+        """
+        Calls the remove() method on the private session attribute
+        """
+        self.__session.remove()
+
     def reload(self):
         """
         Create all tables in the database and initialize the session
